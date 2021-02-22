@@ -1,7 +1,11 @@
 :root {
     --text-color: #161616;
+    --light-gray-color: #f1f1f1;
+    --dark-gray-color: #e5e5e5;
     --background-color: #fff;
 }
 
 $text-color: var(--text-color);
+$light-gray-color: var(---light-gray-color);
+$dark-gray-color: var(--dark-gray-color);
 $background-color: var(--background-color);
