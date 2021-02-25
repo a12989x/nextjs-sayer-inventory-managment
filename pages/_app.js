@@ -1,11 +1,16 @@
 import Layout from '../components/Layout';
+
+import SearchContextProvider from '../context/SearchContext';
+
 import '../styles/main.scss';
 
 const MyApp = ({ Component, pageProps }) => {
     return (
-        <Layout>
-            <Component {...pageProps} />
-        </Layout>
+        <SearchContextProvider>
+            <Layout>
+                <Component {...pageProps} />
+            </Layout>
+        </SearchContextProvider>
     );
 };
 
