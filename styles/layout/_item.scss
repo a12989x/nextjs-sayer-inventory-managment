@@ -1,0 +1,54 @@
+.item {
+    padding: 1.25rem 1.5625rem;
+    display: grid;
+    grid-template: auto / 1fr 1fr;
+    row-gap: 1rem;
+    align-items: center;
+    background-color: $light-gray-color;
+    border-radius: 1.25rem;
+
+    &__codeName,
+    &__qtyName {
+        font-size: 0.9rem;
+    }
+
+    &__code {
+        margin: 0;
+        font-size: 0.95rem;
+        letter-spacing: 0.05rem;
+    }
+
+    &__buttons {
+        display: grid;
+        grid-template: auto / 1fr 1fr 1fr;
+    }
+
+    &__minus,
+    &__plus {
+        padding: 0;
+        background-color: $dark-gray-color;
+        border: none;
+        cursor: pointer;
+    }
+
+    &__minus {
+        border-top-left-radius: 1.25rem;
+        border-bottom-left-radius: 1.25rem;
+    }
+
+    &__plus {
+        border-top-right-radius: 1.25rem;
+        border-bottom-right-radius: 1.25rem;
+    }
+
+    &__form {
+    }
+
+    &__input {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        appearance: textfield;
+        border: 2px solid $dark-gray-color;
+    }
+}
