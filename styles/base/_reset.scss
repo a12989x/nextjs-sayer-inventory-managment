@@ -3,11 +3,14 @@
 }
 
 body {
-    font-weight: 300;
+    font-weight: 200;
+    background-color: $background-color;
 }
 
 #__next {
-    padding: 1rem;
+    padding: 2rem 3rem;
+    margin: 0 auto;
+    max-width: 1800px;
 }
 
 a {
