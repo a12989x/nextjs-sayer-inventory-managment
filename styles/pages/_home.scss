@@ -1,0 +1,27 @@
+.home {
+    margin-top: 2rem;
+    display: grid;
+    grid-template: auto / 2fr 1fr;
+    gap: 1rem;
+
+    &__item {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    &__products {
+        grid-column: 1 / -1;
+        margin: 1.5rem 0 0;
+        font-weight: 200;
+        font-size: 1rem;
+    }
+
+    &__items {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
