@@ -1,10 +1,10 @@
+import { useRouter } from 'next/router';
 import { useState, createContext } from 'react';
+import { parseCookies } from 'nookies';
+import Notiflix from 'notiflix';
 
 import { useForm } from '../hooks/useForm';
-import { getItem } from '../lib/api';
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-const BASE_URL = 'https://ax-strapi-sayer-ecommerce.herokuapp.com';
+import { getItem } from '../lib/items';
 
 export const SearchContext = createContext();
 
@@ -14,10 +14,20 @@ const SearchContextProvider = ({ children }) => {
 
     const getProduct = async (e, value = values.item) => {
         e.preventDefault();
-
         const valueFormatted = value.replace('.', '_').toLowerCase();
-        const item = await getItem(valueFormatted);
+
+        const jwt = parseCookies().jwt;
+
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append('Authorization', `Bearer ${jwt}`);
+
+        const item = await getItem(valueFormatted, myHeaders);
         setItem(item[0]);
+
+        if (item.length === 0)
+            Notiflix.Notify.Failure('Producto no encontrado');
+        else Notiflix.Notify.Success('Producto Obtenido Correctamente');
     };
 
     return (
