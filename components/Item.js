@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
+import { parseCookies } from 'nookies';
+import Notiflix from 'notiflix';
 
-import { changeItemQty } from '../lib/api';
+import { changeItemQty } from '../lib/items';
 
 const Item = ({ id, code, qty, specific }) => {
     const [qtyState, setQtyState] = useState(qty);
+
+    const jwt = parseCookies().jwt;
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${jwt}`);
 
     useEffect(() => {
         setQtyState(qty);
@@ -11,13 +18,14 @@ const Item = ({ id, code, qty, specific }) => {
 
     const handleChange = async (plus = true) => {
         const currentQty = plus ? qtyState + 1 : qtyState - 1;
-        changeItemQty(id, currentQty);
+        changeItemQty(id, currentQty, myHeaders);
         setQtyState(currentQty);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        changeItemQty(id, qtyState);
+        changeItemQty(id, qtyState, myHeaders);
+        Notiflix.Notify.Success('Cantidad actualizada correctamente');
     };
 
     return (
