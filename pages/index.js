@@ -1,13 +1,20 @@
 import { useContext } from 'react';
+import nookies from 'nookies';
 
-import { getItems } from '../lib/api';
+import { getItems } from '../lib/items';
 
 import { SearchContext } from '../context/SearchContext';
 
 import Item from '../components/Item';
 
-export const getServerSideProps = async () => {
-    const items = await getItems();
+export const getServerSideProps = async (ctx) => {
+    const jwt = nookies.get(ctx).jwt;
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${jwt}`);
+
+    const items = await getItems(myHeaders);
 
     return { props: { items } };
 };
