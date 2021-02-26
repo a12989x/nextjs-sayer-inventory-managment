@@ -5,7 +5,13 @@
     row-gap: 1rem;
     align-items: center;
     background-color: $light-gray-color;
+    border: 1px solid $light-gray-color;
     border-radius: 1.25rem;
+    transition: 0.3s;
+
+    &:hover {
+        border-color: $accent-color;
+    }
 
     &__codeName,
     &__qtyName {
