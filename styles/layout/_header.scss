@@ -1,7 +1,7 @@
 .header {
     display: grid;
     grid-auto-flow: column;
-    grid-template: auto / 2fr auto 1fr 1fr;
+    grid-template: auto / auto 20fr 1fr 1fr;
     column-gap: 2rem;
 
     @include media('<=550px') {
@@ -35,7 +35,7 @@
     &__search {
         position: relative;
         padding: 0.5rem 1rem;
-        width: 75vw;
+        width: 100%;
         color: $text-color;
         border-radius: 1rem;
         background-color: $light-gray-color;
