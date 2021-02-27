@@ -5,6 +5,13 @@
     --background-color: #fff;
 }
 
+.dark-mode {
+    --text-color: #fff;
+    --light-gray-color: #212121;
+    --dark-gray-color: #2b2b2b;
+    --background-color: #161616;
+}
+
 $accent-color: #1a8ccb;
 $text-color: var(--text-color);
 $light-gray-color: var(--light-gray-color);
