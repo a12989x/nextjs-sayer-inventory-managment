@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useContext } from 'react';
+import useDarkMode from 'use-dark-mode';
 
 import { SearchContext } from '../context/SearchContext';
 import { AuthContext } from '../context/AuthContext';
@@ -8,6 +9,7 @@ import { AuthContext } from '../context/AuthContext';
 const Header = () => {
     const { values, handleChange, getProduct } = useContext(SearchContext);
     const { logOut } = useContext(AuthContext);
+    const darkMode = useDarkMode(false);
 
     return (
         <header className='header'>
@@ -31,10 +33,23 @@ const Header = () => {
                     onChange={handleChange}
                 />
             </form>
+            <button className='header__theme' onClick={darkMode.toggle}>
+                <Image
+                    className='__svg'
+                    alt={`${darkMode.value ? 'sun' : 'moon'} icon`}
+                    src={`/assets/svg/${
+                        darkMode.value ? 'sun' : 'moon'
+                    }.min.svg`}
+                    height='18'
+                    width='18'
+                />
+            </button>
             <button className='header__logOut' onClick={logOut}>
                 <Image
                     className='header__svg'
-                    src='/assets/svg/log-out.min.svg'
+                    src={`/assets/svg/log-out-${
+                        darkMode.value ? 'dark' : 'light'
+                    }.min.svg`}
                     height='18'
                     width='18'
                 />
