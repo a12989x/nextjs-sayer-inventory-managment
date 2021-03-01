@@ -26,11 +26,13 @@
     }
 
     input {
+        color: $text-color;
         background-color: $light-gray-color;
         border: none;
     }
 
     &__btn {
+        color: $text-color;
         background-color: $dark-gray-color;
         border: 2px solid $accent-color;
         cursor: pointer;
