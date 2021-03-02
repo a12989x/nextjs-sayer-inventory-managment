@@ -1,0 +1,48 @@
+.selectInput {
+    width: 100%;
+    display: grid;
+    grid-template-areas: 'select';
+    align-items: center;
+    font-size: 1rem;
+    line-height: 1.1;
+    background-color: $light-gray-color;
+    border: 1px solid $light-gray-color;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.3s;
+
+    &:hover {
+        border-color: $accent-color;
+    }
+
+    &::after {
+        content: '';
+        width: 0.8em;
+        height: 0.5em;
+        background-color: $dark-gray-color;
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        grid-area: select;
+        justify-self: end;
+        margin-right: 1rem;
+    }
+
+    &__select {
+        padding: 1rem 1.5rem;
+        appearance: none;
+        width: 100%;
+        color: $text-color;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        text-transform: capitalize;
+        line-height: inherit;
+        background-color: transparent;
+        border: none;
+        cursor: inherit;
+        grid-area: select;
+
+        &::-ms-expand {
+            display: none;
+        }
+    }
+}
