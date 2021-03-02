@@ -14,7 +14,11 @@
 @import './layout/item';
 
 /* components */
+@import './components/input';
+@import './components/select-input';
+
 /* pages */
 @import './pages/home';
 @import './pages/login';
+@import './pages/new';
 @import './pages/404';
