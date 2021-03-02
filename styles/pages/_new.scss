@@ -1,0 +1,64 @@
+.new {
+    min-height: calc(100vh - 2.125rem - 4rem);
+    display: grid;
+    place-items: center;
+    font-size: 0.9rem;
+
+    &__form {
+        width: 100%;
+        max-width: 600px;
+        display: grid;
+        grid-template: auto / 2fr 1fr;
+        gap: 1rem;
+    }
+
+    &__product {
+        margin: 0;
+        grid-column: 1 / -1;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    &__titles {
+        grid-column: 1 / -1;
+        padding: 1rem 1.5rem;
+        background-color: $light-gray-color;
+        border-radius: 1.5rem;
+        display: grid;
+        grid-template: auto / 2fr 1.1fr;
+
+        &:not(:nth-child(2)) {
+            margin-top: 1rem;
+        }
+    }
+
+    &__code,
+    &__qty {
+        padding: 1rem 1.5rem;
+    }
+
+    &__code {
+        text-transform: uppercase;
+    }
+
+    &__sizes {
+        grid-column: 1 / -1;
+    }
+
+    &__button {
+        grid-column: 1 / -1;
+        padding: 1rem 1.5rem;
+        margin-top: 1rem;
+        border-radius: 1.5rem;
+        color: $text-color;
+        background-color: $dark-gray-color;
+        border: 2px solid $accent-color;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover {
+            color: $background-color;
+            background-color: $accent-color;
+        }
+    }
+}
