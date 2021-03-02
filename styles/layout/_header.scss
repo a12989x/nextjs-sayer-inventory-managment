@@ -34,15 +34,10 @@
     }
 
     &__search {
-        position: relative;
         padding: 0.5rem 1rem;
         width: 100%;
-        color: $text-color;
         font-size: 0.9rem;
         text-transform: uppercase;
-        border-radius: 1rem;
-        background-color: $light-gray-color;
-        border: none;
     }
 
     &__theme,
