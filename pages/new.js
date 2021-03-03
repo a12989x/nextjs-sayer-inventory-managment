@@ -1,4 +1,4 @@
-import nookies, { parseCookies } from 'nookies';
+import { parseCookies } from 'nookies';
 import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 
