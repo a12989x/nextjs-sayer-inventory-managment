@@ -1,19 +1,16 @@
 import nookies, { parseCookies } from 'nookies';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 
 import { useForm } from '../hooks/useForm';
 import { getOthers } from '../lib/others';
 
 import SelectInput from '../components/SelectInput';
-import { newItem } from '../lib/items';
+import { newItem, getLastItem } from '../lib/items';
 
-export const getServerSideProps = async (ctx) => {
-    const jwt = nookies.get(ctx).jwt;
-
+export const getStaticProps = async () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Authorization', `Bearer ${jwt}`);
 
     const colors = await getOthers('colors', myHeaders, '?_sort=name:asc');
     const variants = await getOthers('variants', myHeaders);
@@ -27,7 +24,7 @@ export const getServerSideProps = async (ctx) => {
     variants.push(defaultOption(variants));
     sizes.push(defaultOption(sizes));
 
-    return { props: { colors, variants, sizes } };
+    return { props: { colors, variants, sizes }, revalidate: 10 };
 };
 
 const New = ({ colors, variants, sizes }) => {
@@ -35,6 +32,29 @@ const New = ({ colors, variants, sizes }) => {
     const [color, setColor] = useState(colors[colors.length - 1]);
     const [variant, setVariant] = useState(variants[variants.length - 1]);
     const [size, setSize] = useState(sizes[sizes.length - 1]);
+    const [lastItem, setLastItem] = useState(null);
+
+    useEffect(async () => {
+        const jwt = parseCookies().jwt;
+
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append('Authorization', `Bearer ${jwt}`);
+
+        const lastItem = await getLastItem(myHeaders);
+
+        setLastItem(lastItem[0]);
+    }, []);
+
+    useEffect(() => {
+        const codeTerm = code.value.slice(-2);
+        const dynamicSize =
+            sizes.filter((size) => size.code === +codeTerm)[0] || null;
+
+        if (!dynamicSize) return;
+
+        setSize(dynamicSize);
+    }, [values.code]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,7 +65,7 @@ const New = ({ colors, variants, sizes }) => {
         myHeaders.append('Content-Type', 'application/json');
         myHeaders.append('Authorization', `Bearer ${jwt}`);
 
-        if (color.name === '' || size.name === '') {
+        if (size.name === '') {
             Notiflix.Notify.Info('Porfavor excoje un color o tamaño');
             return;
         }
@@ -70,6 +90,14 @@ const New = ({ colors, variants, sizes }) => {
         <main className='new'>
             <form className='new__form' onSubmit={handleSubmit}>
                 <h1 className='new__product'>Nuevo Producto :</h1>
+                <section className='new__last'>
+                    <p className='new__lastTitle'>Ultimo Añadido :</p>
+                    {lastItem && (
+                        <span className='new__lastCode'>
+                            {lastItem.code.replace('_', '.')}
+                        </span>
+                    )}
+                </section>
 
                 <div className='new__titles'>
                     <label htmlFor='code' className='new__title'>
@@ -95,6 +123,7 @@ const New = ({ colors, variants, sizes }) => {
                     name='qty'
                     value={values.qty}
                     onChange={handleChange}
+                    min='1'
                     required
                 />
 
