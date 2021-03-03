@@ -10,6 +10,11 @@
         display: grid;
         grid-template: auto / 2fr 1fr;
         gap: 1rem;
+
+        @include media('<=590px') {
+            margin-top: 1rem;
+            grid-template-columns: 1fr;
+        }
     }
 
     &__product {
@@ -17,6 +22,18 @@
         grid-column: 1 / -1;
         font-size: 1rem;
         font-weight: 400;
+    }
+
+    &__last {
+        display: flex;
+
+        &Title {
+            margin: 0 1rem 0 0;
+        }
+
+        &Code {
+            text-transform: uppercase;
+        }
     }
 
     &__titles {
