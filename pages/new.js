@@ -73,7 +73,7 @@ const New = ({ colors, variants, sizes }) => {
         const item = {
             code: values.code.replace('.', '_').toLowerCase(),
             qty: values.qty,
-            color: color.id,
+            color: color.name === '' ? null : color.id,
             variant: variant.name === '' ? null : variant.id,
             size: size.id,
         };
