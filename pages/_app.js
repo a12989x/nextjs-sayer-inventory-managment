@@ -29,7 +29,7 @@ const redirectUser = (ctx, location) => {
     }
 };
 
-MyApp.getInitialProps = async ({ Component, ctx }) => {
+export const getServerSideProps = async ({ Component, ctx }) => {
     let pageProps = {};
     const jwt = parseCookies(ctx).jwt;
 
@@ -41,7 +41,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
         redirectUser(ctx, '/login');
     } else if (jwt && ctx.pathname === '/login') redirectUser(ctx, '/');
 
-    return { pageProps };
+    // return { pageProps };
 };
 
 export default MyApp;
