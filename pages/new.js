@@ -32,7 +32,8 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const New = ({ colors, variants, sizes, lastItem }) => {
-    const [values, handleChange] = useForm({ code: '', qty: 0 });
+    const [values, handleChange] = useForm({ code: '' });
+    const [qty, setQty] = useState(1);
     const [color, setColor] = useState(colors[colors.length - 1]);
     const [variant, setVariant] = useState(variants[variants.length - 1]);
     const [size, setSize] = useState(sizes[sizes.length - 1]);
@@ -64,7 +65,7 @@ const New = ({ colors, variants, sizes, lastItem }) => {
 
         const item = {
             code: values.code.replace('.', '_').toLowerCase(),
-            qty: values.qty,
+            qty,
             color: color.name === '' ? null : color.id,
             variant: variant.name === '' ? null : variant.id,
             size: size.id,
@@ -110,19 +111,30 @@ const New = ({ colors, variants, sizes, lastItem }) => {
                     onChange={handleChange}
                     required
                 />
-                <div>
-                    <button>+</button>
+                <div className='new__qtySection'>
+                    <button
+                        className='new__qtyPlus'
+                        type='button'
+                        onClick={() => setQty(qty + 1)}
+                    >
+                        +
+                    </button>
                     <input
                         className='new__qty'
                         type='number'
                         id='qty'
-                        name='qty'
-                        value={values.qty}
-                        onChange={handleChange}
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
                         min='1'
                         required
                     />
-                    <button>-</button>
+                    <button
+                        className='new__qtyMinus'
+                        type='button'
+                        onClick={() => setQty(qty - 1)}
+                    >
+                        -
+                    </button>
                 </div>
 
                 <div className='new__titles'>
@@ -160,7 +172,9 @@ const New = ({ colors, variants, sizes, lastItem }) => {
                     />
                 </div>
 
-                <button className='new__button'>Crear nuevo color</button>
+                <button type='submit' className='new__button'>
+                    Crear nuevo color
+                </button>
             </form>
         </main>
     );
