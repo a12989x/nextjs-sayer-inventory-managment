@@ -1,5 +1,4 @@
-import Router from 'next/router';
-import { parseCookies } from 'nookies';
+import nookies from 'nookies';
 
 import Layout from '../components/Layout';
 
@@ -21,27 +20,24 @@ const MyApp = ({ Component, pageProps }) => {
 };
 
 const redirectUser = (ctx, location) => {
-    if (ctx.req) {
-        ctx.res.writeHead(302, { Location: location });
-        ctx.res.end();
-    } else {
-        Router.push(location);
-    }
+    ctx.res.setHeader('location', location);
+    ctx.res.statusCode = 302;
+    ctx.res.end();
 };
 
-export const getServerSideProps = async ({ Component, ctx }) => {
+MyApp.getInitialProps = async ({ Component, ctx }) => {
     let pageProps = {};
-    const jwt = parseCookies(ctx).jwt;
+
+    const jwt = nookies.get(ctx).jwt;
 
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps(ctx);
     }
 
-    if (!jwt && ctx.pathname !== '/login') {
-        redirectUser(ctx, '/login');
-    } else if (jwt && ctx.pathname === '/login') redirectUser(ctx, '/');
+    if (!jwt && ctx.pathname !== '/login') redirectUser(ctx, '/login');
+    else if (jwt && ctx.pathname === '/login') redirectUser(ctx, '/');
 
-    // return { pageProps };
+    return { pageProps };
 };
 
 export default MyApp;
