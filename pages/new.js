@@ -72,10 +72,11 @@ const New = ({ colors, variants, sizes, lastItem }) => {
 
         try {
             await newItem(item, myHeaders);
-            setLastItem(item);
+            setLastItemState(item);
             Notiflix.Notify.Success('Producto creado correctamente');
         } catch (err) {
             Notiflix.Notify.Failure('Producto no creado');
+            console.error(err);
         }
     };
 
@@ -109,16 +110,20 @@ const New = ({ colors, variants, sizes, lastItem }) => {
                     onChange={handleChange}
                     required
                 />
-                <input
-                    className='new__qty'
-                    type='number'
-                    id='qty'
-                    name='qty'
-                    value={values.qty}
-                    onChange={handleChange}
-                    min='1'
-                    required
-                />
+                <div>
+                    <button>+</button>
+                    <input
+                        className='new__qty'
+                        type='number'
+                        id='qty'
+                        name='qty'
+                        value={values.qty}
+                        onChange={handleChange}
+                        min='1'
+                        required
+                    />
+                    <button>-</button>
+                </div>
 
                 <div className='new__titles'>
                     <label className='new__title' htmlFor='colors'>
