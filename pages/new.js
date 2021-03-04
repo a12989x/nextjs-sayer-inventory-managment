@@ -1,4 +1,4 @@
-import { parseCookies } from 'nookies';
+import nookies, { parseCookies } from 'nookies';
 import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 
@@ -8,13 +8,17 @@ import { getOthers } from '../lib/others';
 import SelectInput from '../components/SelectInput';
 import { newItem, getLastItem } from '../lib/items';
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx) => {
+    const jwt = nookies.get(ctx).jwt;
+
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${jwt}`);
 
     const colors = await getOthers('colors', myHeaders, '?_sort=name:asc');
     const variants = await getOthers('variants', myHeaders);
     const sizes = await getOthers('sizes', myHeaders);
+    const lastItem = await getLastItem(myHeaders);
 
     const defaultOption = (type) => {
         return { name: '', id: type.length + 100 };
@@ -24,27 +28,15 @@ export const getServerSideProps = async () => {
     variants.push(defaultOption(variants));
     sizes.push(defaultOption(sizes));
 
-    return { props: { colors, variants, sizes }, revalidate: 10 };
+    return { props: { colors, variants, sizes, lastItem } };
 };
 
-const New = ({ colors, variants, sizes }) => {
+const New = ({ colors, variants, sizes, lastItem }) => {
     const [values, handleChange] = useForm({ code: '', qty: 0 });
     const [color, setColor] = useState(colors[colors.length - 1]);
     const [variant, setVariant] = useState(variants[variants.length - 1]);
     const [size, setSize] = useState(sizes[sizes.length - 1]);
-    const [lastItem, setLastItem] = useState(null);
-
-    useEffect(async () => {
-        const jwt = await parseCookies().jwt;
-
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append('Authorization', `Bearer ${jwt}`);
-
-        const lastItem = await getLastItem(myHeaders);
-
-        setLastItem(lastItem[0]);
-    }, []);
+    const [lastItemState, setLastItemState] = useState(lastItem[0]);
 
     useEffect(() => {
         const codeTerm = code.value.slice(-2);
@@ -80,6 +72,7 @@ const New = ({ colors, variants, sizes }) => {
 
         try {
             await newItem(item, myHeaders);
+            setLastItem(item);
             Notiflix.Notify.Success('Producto creado correctamente');
         } catch (err) {
             Notiflix.Notify.Failure('Producto no creado');
@@ -92,9 +85,9 @@ const New = ({ colors, variants, sizes }) => {
                 <h1 className='new__product'>Nuevo Producto :</h1>
                 <section className='new__last'>
                     <p className='new__lastTitle'>Ultimo Añadido :</p>
-                    {lastItem && (
+                    {lastItemState && (
                         <span className='new__lastCode'>
-                            {lastItem.code.replace('_', '.')}
+                            {lastItemState.code.replace('_', '.')}
                         </span>
                     )}
                 </section>
