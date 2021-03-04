@@ -8,7 +8,7 @@ import { getOthers } from '../lib/others';
 import SelectInput from '../components/SelectInput';
 import { newItem, getLastItem } from '../lib/items';
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
@@ -35,7 +35,7 @@ const New = ({ colors, variants, sizes }) => {
     const [lastItem, setLastItem] = useState(null);
 
     useEffect(async () => {
-        const jwt = parseCookies().jwt;
+        const jwt = await parseCookies().jwt;
 
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
