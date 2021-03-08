@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "next": "10.0.7",
+    "next-auth": "^3.11.2",
     "nookies": "^2.5.2",
     "notiflix": "^2.7.0",
     "react": "17.0.1",
