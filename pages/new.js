@@ -1,4 +1,5 @@
 import nookies, { parseCookies } from 'nookies';
+import { signIn, useSession } from 'next-auth/client';
 import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 
@@ -7,18 +8,13 @@ import { getOthers } from '../lib/others';
 
 import SelectInput from '../components/SelectInput';
 import { newItem, getLastItem } from '../lib/items';
+// import { myHeaders } from '../lib/request';
 
-export const getServerSideProps = async (ctx) => {
-    const jwt = nookies.get(ctx).jwt;
-
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Authorization', `Bearer ${jwt}`);
-
-    const colors = await getOthers('colors', myHeaders, '?_sort=name:asc');
-    const variants = await getOthers('variants', myHeaders);
-    const sizes = await getOthers('sizes', myHeaders);
-    const lastItem = await getLastItem(myHeaders);
+export const getStaticProps = async (ctx) => {
+    const colors = await getOthers('colors', '?_sort=name:asc');
+    const variants = await getOthers('variants');
+    const sizes = await getOthers('sizes');
+    const lastItem = await getLastItem();
 
     const defaultOption = (type) => {
         return { name: '', id: type.length + 100 };
@@ -28,10 +24,12 @@ export const getServerSideProps = async (ctx) => {
     variants.push(defaultOption(variants));
     sizes.push(defaultOption(sizes));
 
-    return { props: { colors, variants, sizes, lastItem } };
+    return { props: { colors, variants, sizes, lastItem }, revalidate: 10 };
 };
 
 const New = ({ colors, variants, sizes, lastItem }) => {
+    const [session, loading] = useSession();
+
     const [values, handleChange] = useForm({ code: '' });
     const [qty, setQty] = useState(1);
     const [color, setColor] = useState(colors[colors.length - 1]);
@@ -40,6 +38,13 @@ const New = ({ colors, variants, sizes, lastItem }) => {
     const [lastItemState, setLastItemState] = useState(lastItem[0]);
 
     useEffect(() => {
+        if (loading) return;
+        if (!session) signIn();
+    }, [loading]);
+
+    useEffect(() => {
+        if (!session) return;
+
         const codeTerm = code.value.slice(-2);
         const dynamicSize =
             sizes.filter((size) => size.code === +codeTerm)[0] || null;
@@ -52,11 +57,9 @@ const New = ({ colors, variants, sizes, lastItem }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const jwt = parseCookies().jwt;
-
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append('Authorization', `Bearer ${jwt}`);
+        myHeaders.append('Authorization', `Bearer ${session.jwt}`);
 
         if (size.name === '') {
             Notiflix.Notify.Info('Porfavor excoje un color o tamaño');
@@ -80,6 +83,8 @@ const New = ({ colors, variants, sizes, lastItem }) => {
             console.error(err);
         }
     };
+
+    if (!session) return <p>Loading ...</p>;
 
     return (
         <main className='new'>
