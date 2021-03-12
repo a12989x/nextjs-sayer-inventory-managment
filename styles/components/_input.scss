@@ -1,6 +1,7 @@
 input {
+    padding: $padding;
     color: $text-color;
-    border-radius: 1.5rem;
+    border-radius: $border-radius;
     background-color: $light-gray-color;
     border: none;
     appearance: textfield;
