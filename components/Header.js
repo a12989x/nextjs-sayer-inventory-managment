@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import useDarkMode from 'use-dark-mode';
 
 import { SearchContext } from '../context/SearchContext';
-import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
+    const [session, loading] = useSession();
     const { values, handleChange, getProduct } = useContext(SearchContext);
-    const { logOut } = useContext(AuthContext);
     const darkMode = useDarkMode(false);
     const router = useRouter();
 
@@ -27,7 +27,7 @@ const Header = () => {
                 </a>
             </Link>
             <form className='header__header' onSubmit={getProduct}>
-                {router.pathname === '/' && (
+                {session && router.pathname === '/' && (
                     <input
                         type='text'
                         className='header__search'
@@ -48,29 +48,33 @@ const Header = () => {
                     width='18'
                 />
             </button>
-            <Link href='/new'>
-                <a className='header__plus'>
+            {session && (
+                <Link href='/new'>
+                    <a className='header__plus'>
+                        <Image
+                            className='header__svg'
+                            alt='plus icon'
+                            src={`/assets/svg/plus-${
+                                darkMode.value ? 'dark' : 'light'
+                            }.min.svg`}
+                            height='18'
+                            width='18'
+                        />
+                    </a>
+                </Link>
+            )}
+            {session && (
+                <button className='header__logOut' onClick={() => signOut()}>
                     <Image
                         className='header__svg'
-                        alt='plus icon'
-                        src={`/assets/svg/plus-${
+                        src={`/assets/svg/log-out-${
                             darkMode.value ? 'dark' : 'light'
                         }.min.svg`}
                         height='18'
                         width='18'
                     />
-                </a>
-            </Link>
-            <button className='header__logOut' onClick={logOut}>
-                <Image
-                    className='header__svg'
-                    src={`/assets/svg/log-out-${
-                        darkMode.value ? 'dark' : 'light'
-                    }.min.svg`}
-                    height='18'
-                    width='18'
-                />
-            </button>
+                </button>
+            )}
         </header>
     );
 };
