@@ -1,8 +1,8 @@
 .header {
-    height: 2.125rem;
+    height: 2.1875rem;
     display: grid;
     grid-auto-flow: column;
-    grid-template: auto / auto 40fr 1fr 1fr;
+    grid-template: auto / auto 1fr auto;
     column-gap: 2rem;
 
     @include media('<=550px') {
@@ -23,7 +23,7 @@
 
     &__title {
         margin: 0;
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         text-transform: uppercase;
         color: $text-color;
         font-weight: 300;
@@ -34,9 +34,9 @@
     }
 
     &__search {
-        padding: 0.5rem 1rem;
+        padding: $padding;
         width: 100%;
-        font-size: 0.9rem;
+        font-size: 1rem;
         text-transform: uppercase;
     }
 
