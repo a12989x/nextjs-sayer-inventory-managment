@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import nookies from 'nookies';
+import { signIn, useSession } from 'next-auth/client';
+import { useContext, useEffect } from 'react';
 
 import { getItems } from '../lib/items';
 
@@ -7,20 +7,22 @@ import { SearchContext } from '../context/SearchContext';
 
 import Item from '../components/Item';
 
-export const getServerSideProps = async (ctx) => {
-    const jwt = nookies.get(ctx).jwt;
+export const getStaticProps = async () => {
+    const items = await getItems();
 
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    myHeaders.append('Authorization', `Bearer ${jwt}`);
-
-    const items = await getItems(myHeaders);
-
-    return { props: { items } };
+    return { props: { items }, revalidate: 10 };
 };
 
 const index = ({ items }) => {
+    const [session, loading] = useSession();
     const { item } = useContext(SearchContext);
+
+    useEffect(() => {
+        if (loading) return;
+        if (!session) signIn();
+    }, [loading]);
+
+    if (!session) return <p>Loading ...</p>;
 
     return (
         <main className='home'>
