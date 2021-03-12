@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
 import { useState, createContext } from 'react';
-import { parseCookies } from 'nookies';
 import Notiflix from 'notiflix';
 
 import { useForm } from '../hooks/useForm';
@@ -16,13 +14,7 @@ const SearchContextProvider = ({ children }) => {
         e.preventDefault();
         const valueFormatted = value.replace('.', '_').toLowerCase();
 
-        const jwt = parseCookies().jwt;
-
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        myHeaders.append('Authorization', `Bearer ${jwt}`);
-
-        const item = await getItem(valueFormatted, myHeaders);
+        const item = await getItem(valueFormatted);
         setItem(item[0]);
 
         if (item.length === 0)
