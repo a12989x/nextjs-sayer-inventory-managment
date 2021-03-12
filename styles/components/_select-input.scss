@@ -3,11 +3,9 @@
     display: grid;
     grid-template-areas: 'select';
     align-items: center;
-    font-size: 1rem;
-    line-height: 1.1;
     background-color: $light-gray-color;
     border: 1px solid $light-gray-color;
-    border-radius: 1.5rem;
+    border-radius: $border-radius;
     cursor: pointer;
     transition: border-color 0.3s;
 
@@ -27,7 +25,7 @@
     }
 
     &__select {
-        padding: 1rem 1.5rem;
+        padding: $padding;
         appearance: none;
         width: 100%;
         color: $text-color;
